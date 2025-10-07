@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamGreen", "SteamGreen\SteamGreen.csproj", "{3CDDBB27-C594-4FD0-B4BD-6F90DA335699}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamGreen.Logic", "SteamGreen.Logic\SteamGreen.Logic.csproj", "{94C3D8D6-5AB9-4ECD-A650-91A2D8317C6E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3CDDBB27-C594-4FD0-B4BD-6F90DA335699}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CDDBB27-C594-4FD0-B4BD-6F90DA335699}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CDDBB27-C594-4FD0-B4BD-6F90DA335699}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CDDBB27-C594-4FD0-B4BD-6F90DA335699}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94C3D8D6-5AB9-4ECD-A650-91A2D8317C6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94C3D8D6-5AB9-4ECD-A650-91A2D8317C6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94C3D8D6-5AB9-4ECD-A650-91A2D8317C6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94C3D8D6-5AB9-4ECD-A650-91A2D8317C6E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7B2E897E-2685-451A-8040-F3C8BBCDD532}
+	EndGlobalSection
+EndGlobal

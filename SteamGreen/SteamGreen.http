@@ -1,0 +1,6 @@
+@SteamGreen_HostAddress = http://localhost:5053
+
+GET {{SteamGreen_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
