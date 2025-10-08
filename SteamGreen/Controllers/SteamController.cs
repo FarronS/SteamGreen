@@ -45,5 +45,20 @@ namespace SteamGreen.Controllers
             }
             return Problem("Ошибка получения данных из сервиса Steam");
         }
+        [HttpGet("Achievement")]
+        public async Task<ActionResult> GetAchievement([FromQuery] long gameId)
+        {
+            if (gameId < 0)
+            {
+                return BadRequest($"Ожидается положительный идентификатор для игры ");
+            }
+            var result = await _steamApiClient.GlobalAchievementPercentagesForApp(gameId).ConfigureAwait(false);
+
+            if (result.Success)
+            {
+                return Ok(result.Response);
+            }
+            return Problem("Ошибка получения данных из сервиса Steam");
+        }
     }
 }

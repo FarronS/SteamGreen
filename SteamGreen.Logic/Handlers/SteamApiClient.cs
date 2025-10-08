@@ -21,12 +21,12 @@ namespace SteamGreen.Logic.Handlers
             string url = $"ISteamUser/GetPlayerSummaries/v0002/?key=DD9AE971DF0885AFA38C7260CC54CCE1&steamids={playerId}";
             return await SendGetApiRequest<GetPlayerSummariesJson>(url).ConfigureAwait(false);
         }
-        public async Task<SteamAPiResponse<GlobalAchievementPercentagesForAppJson>> GlobalAchievementPercentagesForApp(int gameId)
+        public async Task<SteamAPiResponse<GlobalAchievementPercentagesForAppJson>> GlobalAchievementPercentagesForApp(long gameId)
         {
             string url = $"ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/?gameid={gameId}&format=json";
             return await SendGetApiRequest<GlobalAchievementPercentagesForAppJson>(url).ConfigureAwait(false);
         }
-        public async Task<SteamAPiResponse<NewsForAppJson>> NewsForApp(int gameId)
+        public async Task<SteamAPiResponse<NewsForAppJson>> NewsForApp(long gameId)
         {
             string url = $"ISteamNews/GetNewsForApp/v0002/?appId={gameId}&count=3&maxlength=300&format=json";
             return await SendGetApiRequest<NewsForAppJson>(url).ConfigureAwait(false);

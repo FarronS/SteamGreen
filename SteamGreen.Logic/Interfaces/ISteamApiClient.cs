@@ -6,8 +6,8 @@ namespace SteamGreen.Logic.Interfaces
     public interface ISteamApiClient
     {
         
-        Task<SteamAPiResponse<GlobalAchievementPercentagesForAppJson>> GlobalAchievementPercentagesForApp(int gameId);
-        Task<SteamAPiResponse<NewsForAppJson>> NewsForApp(int gameId);
+        Task<SteamAPiResponse<GlobalAchievementPercentagesForAppJson>> GlobalAchievementPercentagesForApp(long gameId);
+        Task<SteamAPiResponse<NewsForAppJson>> NewsForApp(long gameId);
         Task<SteamAPiResponse<GetPlayerSummariesJson>> GetPlayerSummaries(long playerId);
     }
 }
