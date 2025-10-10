@@ -14,8 +14,8 @@ namespace SteamGreen.Controllers
             _steamApiClient = steamApiClient;
         }
 
-        [HttpGet("new")]
-        public async Task<ActionResult> Get([FromQuery] int gameId)
+        [HttpGet("Newscity")]
+        public async Task<ActionResult> Get([FromQuery] long gameId)
         {
             if (gameId < 0)
             {
@@ -30,12 +30,12 @@ namespace SteamGreen.Controllers
             return Problem("Ошибка получения данных из сервиса Steam");
         }
 
-        [HttpGet("player")]
+        [HttpGet("PlayerData")]
         public async Task<ActionResult> GetPlayer([FromQuery] long playerId)
         {
             if (playerId < 0)
             {
-                return BadRequest($"Ожидается положительный идентификатор для игры ");
+                return BadRequest($"Ожидается положительный идентификатор для игрока ");
             }
             var result = await _steamApiClient.GetPlayerSummaries(playerId).ConfigureAwait(false);
 
@@ -45,6 +45,7 @@ namespace SteamGreen.Controllers
             }
             return Problem("Ошибка получения данных из сервиса Steam");
         }
+
         [HttpGet("Achievement")]
         public async Task<ActionResult> GetAchievement([FromQuery] long gameId)
         {
