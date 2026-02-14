@@ -5,7 +5,7 @@ body {
 }
 
 .container {
-    padding: 20px;
+    padding: auto;
 }
 
 .card {
@@ -16,10 +16,11 @@ body {
 .btn-primary {
     background: linear-gradient(45deg, #667eea, #764ba2);
     border: none;
-    border-radius: 8px;
+    border-radius: 80px;
     padding: 12px;
     font-weight: 600;
 }
+
 
 .btn-primary:hover {
     background: linear-gradient(45deg, #5a6fd8, #6a4190);
@@ -28,9 +29,9 @@ body {
 }
 
 .form-control {
-    border-radius: 8px;
-    padding: 12px;
-    border: 2px solid #e9ecef;
+    border-radius: auto;
+    padding: auto;
+    border: auto solid #2c85a1;
 }
 
 .form-control:focus {
@@ -46,4 +47,9 @@ body {
 .img-fluid {
     max-width: 184px;
     border: 3px solid #667eea;
+}
+
+
+.display-none{
+    display:  none;
 }
