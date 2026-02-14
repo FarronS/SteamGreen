@@ -5,6 +5,7 @@ using System.Net.Http.Json;
 
 namespace SteamGreen.Logic.Handlers
 {
+    //105600
     //76561199413250631
     //http://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/?gameid=440&format=json
     //http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?appid=440&count=3&maxlength=300&format=json
