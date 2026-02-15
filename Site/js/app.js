@@ -1,113 +1,130 @@
-class SteamPlayerApp {
-    constructor() {
-        this.apiBaseUrl = 'https://localhost:7267'; // Ваш backend URL
-        this.init();
-    }
-    
-    parsePlayerData(data) {
-    console.log('Парсинг данных:', data);
-    
-    // Если ответ содержит поле response
-    if (data.response && data.response.players) {
-        return data.response.players[0];
-    }
-    
-    // Если данные напрямую в массиве players
-    if (data.players && Array.isArray(data.players)) {
-        return data.players[0];
-    }
-    
-    // Если это массив игроков
-    if (Array.isArray(data) && data.length > 0) {
-        return data[0];
-    }
-    
-    // Если это одиночный объект игрока
-    if (data.steamid) {
-        return data;
-    }
-    
-    return null;
-}
+const apiBaseUrl = 'https://localhost:7267';
 
-    init() {
-        document.getElementById('searchForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.searchPlayer();
-        });
-    }
+function onLoad() {
+    debugger;
+    alert('Я загружен')
+    document.getElementById('searchPlayer').onclick =  async () => {
+        await searchPlayer();
+        alert('Нажми меня'); 
+    };
+};
 
-    async searchPlayer() {
-        const steamId = document.getElementById('steamId').value.trim();
-        const resultDiv = document.getElementById('result');
+async function searchPlayer()  {
+    debugger;
+    const steamId = document.getElementById('steamId').value.trim();
+
+    // Валидация
+    if (!_validateSteamId(steamId)) {
+        _showError('Пожалуйста, введите корректный SteamID (17 цифр)');
+        return;
+    }
+    _setLoading(true);
+    try {
+        debugger;
+        const response = await fetch(`${apiBaseUrl}/Steam/PlayerData?playerId=${steamId}`);
         
-        // Валидация
-        if (!this.validateSteamId(steamId)) {
-            this.showError('Пожалуйста, введите корректный SteamID (17 цифр)');
+        if (!response.ok) {
+            throw new Error(`Ошибка сервера: ${response.status}`);
+        }
+        console.log(response);
+        const data = await response.json();
+        /*_displayResult(data);*/
+        const player = data?.response?.players.length > 0 ? data?.response?.players[0] : undefined;
+
+        if(!player){
+            console.log('player is undefined');
             return;
         }
+        fillElementById('cardBodyAvatarId', (element) => {
+            element.setAttribute('src', player.avatarfull || player.avatar || 'https://via.placeholder.com/184x184?text=No+Image');
+        });
 
-        this.setLoading(true);
+        fillElementById('cardBodyRealNameId', (element) => {
+            element.innerText  = player.personaname || player.personename || 'Не указано';
+        });
+        fillElementById('cardBodySteamId', (element) => {
+            element.innerText = player.steamid
+        });
+         fillElementById('cardBodyPersonaState', (element) => {
+            element.innerText = _getPersonaStateText(player.personastate)
+        });
+         fillElementById('cardBodyPersonaState', (element) => {
+            element.innerText = player.loccountrycode || player.countrycode || 'Не указана'
+        });  
+         fillElementById('cardBodyPersonaState', (element) => {
+            element.innerText = player.profilestate === 1 ? 'Настроен' : 'Не настроен'
+        });
 
-        try {
-            debugger;
-            const response = await fetch(`${this.apiBaseUrl}/Steam/PlayerData?playerId=${steamId}`);
-            
-            if (!response.ok) {
-                throw new Error(`Ошибка сервера: ${response.status}`);
+        const cardBodyProfileUrl = document.getElementById('cardBodyProfileUrlId');
+        if (player.profileurl && cardBodyProfileUrl) {
+            cardBodyProfileUrl.remove('display-none');
+            const a = cardBodyProfileUrl.getElementsByTagName('a');
+            if(a && a.length > 0){
+                a[0].setAttribute('href', player.profileurl);
             }
-
-            const data = await response.json();
-            this.displayResult(data);
-            
-        } catch (error) {
-            console.error('Error:', error);
-            this.showError(`Не удалось получить данные: ${error.message}`);
-        } finally {
-            this.setLoading(false);
         }
-    }
-
-    validateSteamId(steamId) {
-        return /^\d{17}$/.test(steamId);
-    }
-
-    setLoading(isLoading) {
-        const searchText = document.getElementById('searchText');
-        const searchSpinner = document.getElementById('searchSpinner');
-        const searchButton = document.querySelector('#searchForm button');
+        else{
+            cardBodyProfileUrl.add('display-none');
+        }
         
-        if (isLoading) {
-            searchText.textContent = 'Поиск...';
-            searchSpinner.classList.remove('d-none');
-            searchButton.disabled = true;
-        } else {
-            searchText.textContent = 'Найти игрока';
-            searchSpinner.classList.add('d-none');
-            searchButton.disabled = false;
-        }
+
+        
+    } catch (error) {
+        console.error('Error:', error);
+        _showError(`Не удалось получить данные: ${error.message}`);
+    } finally {
+        _setLoading(false);
     }
+}
 
-displayResult(data) {
+function _validateSteamId(steamId) {
+    return /^\d{17}$/.test(steamId);
+}
+
+ function _showError(message) {
     const resultDiv = document.getElementById('result');
-    
-     console.log('Raw data:', data);
+    resultDiv.innerHTML = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Ошибка!</strong> ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>`;
+}
 
-      const player = this.parsePlayerData(data);
+
+function _setLoading(isLoading) {
+    const searchText = document.getElementById('searchText');
+    const searchSpinner = document.getElementById('searchSpinner');
+    const searchButton = document.getElementById('searchPlayer');
     
+    if (isLoading) {
+        searchText.textContent = 'Поиск...';
+        searchSpinner.classList.remove('d-none');
+        searchButton.disabled = true;
+    } else {
+        searchText.textContent = 'Найти игрока';
+        searchSpinner.classList.add('d-none');
+        searchButton.disabled = false;
+    }
+}
+
+
+function _displayResult(data) {
+    console.log('Raw data:', data);
+    const player = data?.response?.players.length > 0 ? data?.response?.players[0] : undefined;
     // Универсальная проверка на пустые данные
     if (!player) {
-        this.showError('Игрок не найден или неверная структура данных');
+        _showError('Игрок не найден или неверная структура данных');
         console.log('Player data is null or undefined');
         return;
     }
-     this.renderPlayerCard(player);
+    _renderPlayerCard(player);
 }
 
-// Новый метод для отображения карточки
-renderPlayerCard(player) {
+function _renderPlayerCard(player) {
     const resultDiv = document.getElementById('result');
-    
+    debugger;
+
+   
     resultDiv.innerHTML = `
         <div class="card shadow">
             <div class="card-header bg-primary text-white">
@@ -122,7 +139,8 @@ renderPlayerCard(player) {
                              class="img-fluid rounded mb-3"
                              onerror="this.src='https://via.placeholder.com/184x184?text=No+Image'">
                         <h5>${player.personaname || player.personename || 'Не указано'}</h5>
-                        ${player.realname ? `<p class="text-muted">${player.realname}</p>` : ''}
+                        ${player.realname ? `
+                        <p class="text-muted">${player.realname}</p>` : ''}
                     </div>
                     
                     <!-- Информация -->
@@ -134,7 +152,7 @@ renderPlayerCard(player) {
                             </div>
                             <div class="col-6">
                                 <strong>Статус:</strong>
-                                <p>${this.getPersonaStateText(player.personastate)}</p>
+                                <p>${_getPersonaStateText(player.personastate)}</p>
                             </div>
                             <div class="col-6">
                                 <strong>Страна:</strong>
@@ -160,35 +178,21 @@ renderPlayerCard(player) {
     `;
 }
 
-    getPersonaStateText(state) {
-        const states = {
-            0: 'Оффлайн',
-            1: 'Онлайн',
-            2: 'Занят',
-            3: 'Нет на месте',
-            4: 'Спит',
-            5: 'В торговле',
-            6: 'Хочет поиграть'
-        };
-        return states[state] || 'Неизвестно';
-    }
-
-    formatTimestamp(timestamp) {
-        return new Date(timestamp * 1000).toLocaleDateString('ru-RU');
-    }
-
-    showError(message) {
-        const resultDiv = document.getElementById('result');
-        resultDiv.innerHTML = `
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>Ошибка!</strong> ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        `;
-    }
+function  _getPersonaStateText(state) {
+    const states = {
+        0: 'Оффлайн',
+        1: 'Онлайн',
+        2: 'Занят',
+        3: 'Нет на месте',
+        4: 'Спит',
+        5: 'В торговле',
+        6: 'Хочет поиграть'
+    };
+    return states[state] || 'Неизвестно';
 }
 
-// Инициализация приложения
-document.addEventListener('DOMContentLoaded', () => {
-    new SteamPlayerApp();
-});
+function _formatTimestamp(timestamp) {
+    return new Date(timestamp * 1000).toLocaleDateString('ru-RU');
+}
+
+
