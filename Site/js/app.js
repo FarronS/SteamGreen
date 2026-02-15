@@ -2,10 +2,10 @@ const apiBaseUrl = 'https://localhost:7267';
 
 function onLoad() {
     debugger;
-    alert('Я загружен')
+    
     document.getElementById('searchPlayer').onclick =  async () => {
         await searchPlayer();
-        alert('Нажми меня'); 
+         
     };
 };
 
