@@ -2,8 +2,15 @@ const apiBaseUrl = 'https://localhost:7267';
 
 function onLoad() {
     debugger;
+<<<<<<< HEAD
     document.getElementById('searchPlayer').onclick =  async () => {
         await searchPlayer();
+=======
+    
+    document.getElementById('searchPlayer').onclick =  async () => {
+        await searchPlayer();
+         
+>>>>>>> ce46c89ad08654e51782f8a259dbdb54a27330d1
     };
 };
 
