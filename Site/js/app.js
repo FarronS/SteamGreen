@@ -2,10 +2,8 @@ const apiBaseUrl = 'https://localhost:7267';
 
 function onLoad() {
     debugger;
-    alert('Я загружен')
     document.getElementById('searchPlayer').onclick =  async () => {
         await searchPlayer();
-        alert('Нажми меня'); 
     };
 };
 
@@ -35,36 +33,36 @@ async function searchPlayer()  {
             console.log('player is undefined');
             return;
         }
-        fillElementById('cardBodyAvatarId', (element) => {
+        _fillElementById('cardBodyAvatarId', (element) => {
             element.setAttribute('src', player.avatarfull || player.avatar || 'https://via.placeholder.com/184x184?text=No+Image');
         });
 
-        fillElementById('cardBodyRealNameId', (element) => {
+        _fillElementById('cardBodyRealNameId', (element) => {
             element.innerText  = player.personaname || player.personename || 'Не указано';
         });
-        fillElementById('cardBodySteamId', (element) => {
+        _fillElementById('cardBodySteamId', (element) => {
             element.innerText = player.steamid
         });
-         fillElementById('cardBodyPersonaState', (element) => {
+         _fillElementById('cardBodyPersonaState', (element) => {
             element.innerText = _getPersonaStateText(player.personastate)
         });
-         fillElementById('cardBodyPersonaState', (element) => {
+         _fillElementById('cardBodyCountryCode', (element) => {
             element.innerText = player.loccountrycode || player.countrycode || 'Не указана'
         });  
-         fillElementById('cardBodyPersonaState', (element) => {
+         _fillElementById('cardBodyProfileState', (element) => {
             element.innerText = player.profilestate === 1 ? 'Настроен' : 'Не настроен'
         });
 
         const cardBodyProfileUrl = document.getElementById('cardBodyProfileUrlId');
         if (player.profileurl && cardBodyProfileUrl) {
-            cardBodyProfileUrl.remove('display-none');
+            cardBodyProfileUrl.classList.remove('display-none');
             const a = cardBodyProfileUrl.getElementsByTagName('a');
             if(a && a.length > 0){
                 a[0].setAttribute('href', player.profileurl);
             }
         }
         else{
-            cardBodyProfileUrl.add('display-none');
+            cardBodyProfileUrl.classList.add('display-none');
         }
         
 
@@ -74,6 +72,13 @@ async function searchPlayer()  {
         _showError(`Не удалось получить данные: ${error.message}`);
     } finally {
         _setLoading(false);
+    }
+}
+
+function _fillElementById(elementId, setFunc){
+    const element = document.getElementById(elementId);
+    if(element){
+        setFunc(element);
     }
 }
 
@@ -120,63 +125,63 @@ function _displayResult(data) {
     _renderPlayerCard(player);
 }
 
-function _renderPlayerCard(player) {
-    const resultDiv = document.getElementById('result');
-    debugger;
+// function _renderPlayerCard(player) {
+//     const resultDiv = document.getElementById('result');
+//     debugger;
 
    
-    resultDiv.innerHTML = `
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Информация об игроке</h4>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <!-- Аватар -->
-                    <div class="col-md-3 text-center">
-                        <img src="${player.avatarfull || player.avatar || 'https://via.placeholder.com/184x184?text=No+Image'}" 
-                             alt="Аватар" 
-                             class="img-fluid rounded mb-3"
-                             onerror="this.src='https://via.placeholder.com/184x184?text=No+Image'">
-                        <h5>${player.personaname || player.personename || 'Не указано'}</h5>
-                        ${player.realname ? `
-                        <p class="text-muted">${player.realname}</p>` : ''}
-                    </div>
+//     resultDiv.innerHTML = `
+//         <div class="card shadow">
+//             <div class="card-header bg-primary text-white">
+//                 <h4 class="mb-0">Информация об игроке</h4>
+//             </div>
+//             <div class="card-body">
+//                 <div class="row">
+//                     <!-- Аватар -->
+//                     <div class="col-md-3 text-center">
+//                         <img src="${player.avatarfull || player.avatar || 'https://via.placeholder.com/184x184?text=No+Image'}" 
+//                              alt="Аватар" 
+//                              class="img-fluid rounded mb-3"
+//                              onerror="this.src='https://via.placeholder.com/184x184?text=No+Image'">
+//                         <h5>${player.personaname || player.personename || 'Не указано'}</h5>
+//                         ${player.realname ? `
+//                         <p class="text-muted">${player.realname}</p>` : ''}
+//                     </div>
                     
-                    <!-- Информация -->
-                    <div class="col-md-9">
-                        <div class="row">
-                            <div class="col-6">
-                                <strong>SteamID:</strong>
-                                <p class="text-break">${player.steamid}</p>
-                            </div>
-                            <div class="col-6">
-                                <strong>Статус:</strong>
-                                <p>${_getPersonaStateText(player.personastate)}</p>
-                            </div>
-                            <div class="col-6">
-                                <strong>Страна:</strong>
-                                <p>${player.loccountrycode || player.countrycode || 'Не указана'}</p>
-                            </div>
-                            <div class="col-6">
-                                <strong>Профиль:</strong>
-                                <p>${player.profilestate === 1 ? 'Настроен' : 'Не настроен'}</p>
-                            </div>
-                        </div>
+//                     <!-- Информация -->
+//                     <div class="col-md-9">
+//                         <div class="row">
+//                             <div class="col-6">
+//                                 <strong>SteamID:</strong>
+//                                 <p class="text-break">${player.steamid}</p>
+//                             </div>
+//                             <div class="col-6">
+//                                 <strong>Статус:</strong>
+//                                 <p>${_getPersonaStateText(player.personastate)}</p>
+//                             </div>
+//                             <div class="col-6">
+//                                 <strong>Страна:</strong>
+//                                 <p>${player.loccountrycode || player.countrycode || 'Не указана'}</p>
+//                             </div>
+//                             <div class="col-6">
+//                                 <strong>Профиль:</strong>
+//                                 <p>${player.profilestate === 1 ? 'Настроен' : 'Не настроен'}</p>
+//                             </div>
+//                         </div>
                         
-                        ${player.profileurl ? `
-                            <div class="mt-3">
-                                <a href="${player.profileurl}" target="_blank" class="btn btn-outline-primary">
-                                    Открыть профиль Steam
-                                </a>
-                            </div>
-                        ` : ''}
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-}
+//                         ${player.profileurl ? `
+//                             <div class="mt-3">
+//                                 <a href="${player.profileurl}" target="_blank" class="btn btn-outline-primary">
+//                                     Открыть профиль Steam
+//                                 </a>
+//                             </div>
+//                         ` : ''}
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
+//     `;
+// }
 
 function  _getPersonaStateText(state) {
     const states = {
